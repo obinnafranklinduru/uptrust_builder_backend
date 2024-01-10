@@ -11,8 +11,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@kinde-oss/kinde-node-express": "^1.0.12",
-    "@kinde-oss/kinde-nodejs-sdk": "^1.2.3",
     "amqplib": "^0.10.3",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
