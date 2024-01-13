@@ -2,70 +2,70 @@
   {
     "email": "test1@gmail.com",
     "password": "Password123",
-    "phone": "test1234",
+    "phone": "+2348064248389",
     "firstName": "John",
     "lastName": "Doe"
   },
   {
     "email": "test2@gmail.com",
     "password": "Password456",
-    "phone": "test5678",
+    "phone": "+2348064248389",
     "firstName": "Jane",
     "lastName": "Smith"
   },
   {
     "email": "test3@gmail.com",
     "password": "Pass987word",
-    "phone": "test9876",
+    "phone": "+2348064248389",
     "firstName": "Bob",
     "lastName": "Johnson"
   },
   {
     "email": "test4@gmail.com",
     "password": "PassWord123",
-    "phone": "test4321",
+    "phone": "+2348064248389",
     "firstName": "Alice",
     "lastName": "Williams"
   },
   {
     "email": "test5@gmail.com",
     "password": "Pwd456Word",
-    "phone": "test8765",
+    "phone": "+2348064248389",
     "firstName": "Charlie",
     "lastName": "Brown"
   },
   {
     "email": "test6@gmail.com",
     "password": "Password789",
-    "phone": "test2345",
+    "phone": "+2348064248389",
     "firstName": "Eva",
     "lastName": "Miller"
   },
   {
     "email": "test7@gmail.com",
     "password": "Word123Pass",
-    "phone": "test6543",
+    "phone": "+2348064248389",
     "firstName": "David",
     "lastName": "Clark"
   },
   {
     "email": "test8@gmail.com",
     "password": "PassTest123",
-    "phone": "test5678",
+    "phone": "+2348064248389",
     "firstName": "Grace",
     "lastName": "Davis"
   },
   {
     "email": "test9@gmail.com",
     "password": "TestPass123",
-    "phone": "test1234",
+    "phone": "+2348064248389",
     "firstName": "Sam",
     "lastName": "Moore"
   },
   {
     "email": "test10@gmail.com",
     "password": "Test123Pass",
-    "phone": "test7890",
+    "phone": "+2348064248389",
     "firstName": "Linda",
     "lastName": "Taylor"
   }

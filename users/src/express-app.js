@@ -13,19 +13,21 @@ const ErrorHandler = require('./utils/error-handler');
  * @param {Object} app - Express application instance.
  * @param {amqplib.Channel} channel - Message broker channel
  */
+
 module.exports = async (app, channel) => {
     try {
         // Security Middlewares Configuration
         app.use(helmet()); // set security HTTP headers
         app.use(cors()); // Enable CORS for handling cross-origin requests
+        app.options('/*', cors());
         app.use(compression()); // gzip compression
         app.use(express.json()); // Enable JSON parsing for request bodies
         app.use(express.urlencoded({ extended: true })); // Enable parse urlencoded request body
         app.use(mongoSanitize()); // sanitize request data
         app.use(hpp()); // protect against HTTP Parameter Pollution attacks
 
-        // Configure customer-related routes and middleware
-        user(app, channel);
+        // Configure user-related routes and middleware
+        user(app, channel)
 
         // error handler
         app.use(ErrorHandler)

@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
-const AddressSchema = new mongoose.Schema({
-    street: { type: String, required: true },
-    postalCode: { type: String, required: true },
-    city: { type: String, required: true },
-    country: { type: String, required: true }
+const addressSchema = new mongoose.Schema({
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    city: { type: String },
+    state: { type: String },
+    country: { type: String },
+    deleted: { type: Boolean, default: false },
 }, {
     toJSON: {
         transform(doc, ret) {
@@ -14,4 +15,6 @@ const AddressSchema = new mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Address', AddressSchema);
+addressSchema.index({ deleted: 1 });
+
+module.exports = mongoose.model('Address', addressSchema);
