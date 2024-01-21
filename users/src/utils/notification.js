@@ -49,7 +49,7 @@ module.exports.SendVerificationCode = async (code, phone) => {
     }
 };
 
-module.exports.sendMail = async (code, email, name) => {
+module.exports.sendMail = async({ code, email, name }) => {
     const response = {
         body: {
             name: `${name}`,

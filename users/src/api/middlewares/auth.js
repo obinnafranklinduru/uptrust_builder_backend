@@ -18,8 +18,6 @@ module.exports = async (req, res, next) => {
         console.log("isAuthenticated", isAuthenticated);
 
         if (isAuthenticated) {
-            // If authorized, proceed to the next middleware or route handler
-            req.user = isAuthenticated;
             return next();
         } else {
             return res.redirect("/login");

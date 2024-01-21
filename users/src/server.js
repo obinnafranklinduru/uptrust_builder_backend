@@ -14,10 +14,11 @@ const StartServer = async () => {
 
     // Create a messaging channel- a communication link that allows different parts of
     // a distributed system to exchange messages.
-    const channel = await CreateChannel();
+    // const channel = await CreateChannel();
 
     // Set up the Express application
-    await expressApp(app, channel);
+    // await expressApp(app, channel);
+    await expressApp(app);
 
     // Start listening on the specified port
     const server = app.listen(PORT, () => {

@@ -12,6 +12,12 @@ module.exports.userSignupSchema = Joi.object({
         .message('Phone number must be a numeric string with a maximum length of 15 digits.'),
 });
 
+module.exports.userPasswordSchema = Joi.object({
+    password: Joi.string().required()
+        .pattern(new RegExp('^(?=.*[!@#$%^&*()_+\\-=\\[\\]{};:\'"<>,./?]).{8,}$'))
+        .message('Password must be at least 8 characters long and contain at least one special character.')
+});
+
 module.exports.basicContactSchema = Joi.object({
     headline: Joi.string(),
     summary: Joi.string(),

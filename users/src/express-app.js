@@ -6,7 +6,7 @@ const hpp = require('hpp');
 const mongoSanitize = require('express-mongo-sanitize');
 
 const { user } = require('./api');
-const ErrorHandler = require('./utils/error-handler');
+const { ErrorHandler } = require('./utils/error-handler');
 
 /**
  * Configure the Express application.

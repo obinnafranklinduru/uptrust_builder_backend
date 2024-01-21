@@ -6,7 +6,8 @@ const {
     RecommendationModel,
     UserModel,
 } = require('../models');
-const { GenerateSalt, GeneratePassword, GenerateAccessCode } = require("../../utils");
+const { GenerateSalt, GeneratePassword } = require("../../utils");
+const { GenerateAccessCode }= require("../../utils/notification");
 
 // Repository handling database operations for users
 class UserRepository {
@@ -32,17 +33,13 @@ class UserRepository {
         try {
             const { code, expiry } = GenerateAccessCode();
 
-            const updatedUser = await UserModel.findOneAndUpdate(
+            const user = await UserModel.findOneAndUpdate(
                 { _id: userId, verified: false, deleted: false },
                 { verification_code: code, expiry },
                 { new: true }
             );
-            
-            if (updatedUser) {
-                return { code }
-            } else {
-                throw new Error("User already verified!");
-            }
+            if (!user) throw new Error("User already verified!");
+            return user; 
         } catch (error) {
             console.error('Error updating verification code:', error);
             throw new Error(error.message);
@@ -51,18 +48,12 @@ class UserRepository {
 
     async updateVerifyUser(code, userId) {
         try {
-            // Find the user by the OTP code
             const user = await UserModel.findOne({ _id: userId, verification_code: code });
-
-            if (!user) {
-                throw new Error('Code is invalid');
-            }
+            if (!user) throw new Error('Code is invalid');
 
             // Check if the OTP has not expired
             const currentTimestamp = new Date().getTime();
-            if (user.verification_code && currentTimestamp > user.expiry) {
-                throw new Error('OTP has expired');
-            }
+            if (user.verification_code && currentTimestamp > user.expiry) throw new Error('OTP has expired');
 
             // Update the user's verification status
             user.verified = true;
@@ -70,21 +61,24 @@ class UserRepository {
             user.expiry = "";
 
             // Save the updated user
-            await user.save();
-
-            return user;
+            return await user.save();
         } catch (error) {
             console.error(error.message);
+        }
+    }
+
+    async getUserByEmail(email) {
+        try {
+            return await UserModel.findOne({ email });
+        } catch (error) {
+            throw new Error(error.message);
         }
     }
 
     async generateOtpRequest(userId) {
         try {
             const user = await UserModel.findById(userId);
-
-            if (!user) {
-                throw new Error('User not found');
-            }
+            if (!user) throw new Error('User not found');
 
             // Check if the OTP has expired or is empty
             const currentTimestamp = new Date().getTime();
@@ -94,11 +88,10 @@ class UserRepository {
                 // Update user fields
                 user.verification_code = code;
                 user.expiry = expiry;
+                user.verified = false;
 
                 // Save the updated user
-                await user.save();
-
-                return { code, email: user.email, name: user.firstName };
+                return await user.save();
             } else {
                 throw new Error('OTP request already sent; wait for some minutes');
             }
@@ -110,11 +103,8 @@ class UserRepository {
 
     async generateOtpForgottenPass(email) {
         try {
-            const user = await this.getUserByEmail(email);
-
-            if (!user) {
-                throw new Error('User not found');
-            }
+            const user = await UserModel.findOne({ email });
+            if (!user) throw new Error('User not found');
 
             const { code, expiry } = GenerateAccessCode();
 
@@ -124,34 +114,14 @@ class UserRepository {
             user.verified = false;
 
             // Save the updated user
-            await user.save();
-
-            return { code, email: user.email, name: user.firstName };
+            return await user.save();
         } catch (error) {
             console.error('Error generating OTP request:', error);
             throw new Error(error.message);
         }
     }
 
-    async getUserByEmail(email) {
-        try {
-            const user = await UserModel.findOne({ email });
-            return user;
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async getUserById(userId) {
-        try {
-            const user = await UserModel.findById(userId);
-            return user;
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async PasswordReset(userId, password) {
+    async PasswordReset(userId, { password }) {
         try {
             const salt = await GenerateSalt();
             const hashedPassword = await GeneratePassword(password, salt);
@@ -162,9 +132,8 @@ class UserRepository {
                 { new: true }
             );
             
-            if (updatedUser) return updatedUser;
-            
-            throw new Error("User not verified!")
+            if (!updatedUser) throw new Error("User not verified!")
+            return updatedUser;
         } catch (error) {
             console.log(error);
         }
@@ -177,10 +146,9 @@ class UserRepository {
             if (data.headline) update.headline = data.headline;
             if (data.summary) update.summary = data.summary;
             if (data.careerGoals) update.careerGoals = data.careerGoals;
-            if (data.skills) {
-                const skills = data.skills.map(rec => ({ ...rec }));
-                update.skills = skills;
-            }
+            if (data.skills) update.skills = data.skills;
+            if (data.socialMedia) update.socialMedia = data.socialMedia;
+
             if (data.address) {
                 // Create new address object
                 const address = await AddressModel.create({
@@ -191,11 +159,11 @@ class UserRepository {
                 update.address = [address._id];
             }
 
-            if (data.socialMedia) {
-                update.socialMedia = data.socialMedia;
-            }
-
-            return await UserModel.findByIdAndUpdate(userId, update);
+            return await UserModel.findOneAndUpdate(
+                { _id: userId },
+                update,
+                { new: true }
+            );
         } catch (error) {
             throw new Error("Error updating user!");
         }
@@ -205,39 +173,43 @@ class UserRepository {
         try {
             const update = {};
 
-            if (data.accomplishments) {
-                // Create accomplishment object
-                const accomplishment = await AccomplishmentModel.create({
-                    user_id: userId,
-                    ...data.accomplishments
-                });
+            console.log("DataModel -> ", data);
+            // console.log("AccModel -> ", ...data.accomplishments);
+            // console.log("PublicModel -> ", data.accomplishments.publications);
+
+            // if (data.accomplishments) {
+            //     // Create accomplishment object
+            //     const accomplishment = await AccomplishmentModel.create({
+            //         user_id: userId,
+            //         ...data.accomplishments
+            //     });
     
-                update.accomplishments = accomplishment._id;
-            }
+            //     update.accomplishments = accomplishment._id;
+            // }
 
-            if (data.education) {
-                // Create education objects
-                const educations = data.education.map(edu => ({
-                    user_id: userId,
-                    ...edu
-                }));
+            // if (data.education) {
+            //     // Create education objects
+            //     const educations = data.education.map(edu => ({
+            //         user_id: userId,
+            //         ...edu
+            //     }));
     
-                const newEducations = await EducationModel.create(educations);
+            //     const newEducations = await EducationModel.create(educations);
     
-                update.education = newEducations.map(edu => edu._id);
-            }
+            //     update.education = newEducations.map(edu => edu._id);
+            // }
 
-            if (data.experience) {
-                // Create experience objects
-                const experiences = data.experience.map(exp => ({
-                    user_id: userId,
-                    ...exp
-                }));
+            // if (data.experience) {
+            //     // Create experience objects
+            //     const experiences = data.experience.map(exp => ({
+            //         user_id: userId,
+            //         ...exp
+            //     }));
 
-                const newExperiences = await ExperienceModel.create(experiences);
+            //     const newExperiences = await ExperienceModel.create(experiences);
 
-                update.experience = newExperiences.map(exp => exp._id);
-            }
+            //     update.experience = newExperiences.map(exp => exp._id);
+            // }
 
             if (data.recommendations) {
                 // Create recommendation objects
@@ -251,10 +223,14 @@ class UserRepository {
                 update.recommendations = newRecs.map(rec => rec._id);
             }
 
-            if (data.resumeLink) update.resumeLink = data.resumeLink;
-            if (data.interests) update.interests = data.interests;
+            // if (data.resumeLink) update.resumeLink = data.resumeLink;
+            // if (data.interests) update.interests = data.interests;
 
-            return await User.findByIdAndUpdate(userId, update);
+            return await UserModel.findOneAndUpdate(
+                { _id: userId },
+                update,
+                { new: true }
+            );
         } catch (error) {
             throw new Error("Error updating user!");
         }

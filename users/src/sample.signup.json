@@ -1,0 +1,72 @@
+[
+  {
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@example.com",
+    "password": "P@ssw0rd",
+    "phone": "12345678901"
+  },
+  {
+    "firstName": "Alice",
+    "lastName": "Smith",
+    "email": "alice.smith@example.com",
+    "password": "SecurePwd123!",
+    "phone": "98765432109"
+  },
+  {
+    "firstName": "Bob",
+    "lastName": "Johnson",
+    "email": "bob.johnson@example.com",
+    "password": "Secret@123",
+    "phone": "55566677788"
+  },
+  {
+    "firstName": "Eva",
+    "lastName": "Brown",
+    "email": "eva.brown@example.com",
+    "password": "StrongP@ss",
+    "phone": "123456789012"
+  },
+  {
+    "firstName": "Charlie",
+    "lastName": "Miller",
+    "email": "charlie.miller@example.com",
+    "password": "SecurePwd12@",
+    "phone": "99900011122"
+  },
+  {
+    "firstName": "Grace",
+    "lastName": "Davis",
+    "email": "grace.davis@example.com",
+    "password": "P@ssword123",
+    "phone": "11122233344"
+  },
+  {
+    "firstName": "Sam",
+    "lastName": "White",
+    "email": "sam.white@example.com",
+    "password": "StrongP@ssword",
+    "phone": "77788899900"
+  },
+  {
+    "firstName": "Lily",
+    "lastName": "Taylor",
+    "email": "lily.taylor@example.com",
+    "password": "Secure@1234",
+    "phone": "1234567890123"
+  },
+  {
+    "firstName": "Mike",
+    "lastName": "Hill",
+    "email": "mike.hill@example.com",
+    "password": "P@ss123word",
+    "phone": "444555666777"
+  },
+  {
+    "firstName": "Sophie",
+    "lastName": "Clark",
+    "email": "sophie.clark@example.com",
+    "password": "SecurePwd!23",
+    "phone": "876543210987"
+  }
+]

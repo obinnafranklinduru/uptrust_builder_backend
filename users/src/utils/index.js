@@ -120,32 +120,32 @@ module.exports.CreateChannel = async () => {
  * @param {amqplib.Channel} channel - Message broker channel.
  * @param {Object} service - Service object with SubscribeEvents method.
  */
-module.exports.SubscribeMessage = async (channel, service) => {
-  // Declare the exchange with a direct type and durability
-  await channel.assertExchange(EXCHANGE_NAME, "direct", { durable: true });
+// module.exports.SubscribeMessage = async (channel, service) => {
+//   // Declare the exchange with a direct type and durability
+//   await channel.assertExchange(EXCHANGE_NAME, "direct", { durable: true });
 
-  // Declare a queue with a direct type and durability
-  const q = await channel.assertQueue(EXCHANGE_NAME, "direct", { durable: true });
-  console.log(`Waiting for messages in queue: ${q.queue}`);
+//   // Declare a queue with a direct type and durability
+//   const q = await channel.assertQueue(EXCHANGE_NAME, "direct", { durable: true });
+//   console.log(`Waiting for messages in queue: ${q.queue}`);
 
-  // Bind the queue to the exchange using the USER_SERVICE routing key
-  channel.bindQueue(q.queue, EXCHANGE_NAME, USER_SERVICE);
+//   // Bind the queue to the exchange using the USER_SERVICE routing key
+//   channel.bindQueue(q.queue, EXCHANGE_NAME, USER_SERVICE);
 
-  // Consume messages from the queue
-  channel.consume(
-    q.queue,
-    (msg) => {
-      if (msg.content) {
-        // Process the received message and invoke the SubscribeEvents method
-        console.log("Received message:", msg.content.toString());
-        service.SubscribeEvents(msg.content.toString());
-      } else {
-        console.log("[X] Received");
-      }
-    },
-    { noAck: true } // Automatically acknowledge messages (no manual acknowledgment)
-  );
-};
+//   // Consume messages from the queue
+//   channel.consume(
+//     q.queue,
+//     (msg) => {
+//       if (msg.content) {
+//         // Process the received message and invoke the SubscribeEvents method
+//         console.log("Received message:", msg.content.toString());
+//         service.SubscribeEvents(msg.content.toString());
+//       } else {
+//         console.log("[X] Received");
+//       }
+//     },
+//     { noAck: true } // Automatically acknowledge messages (no manual acknowledgment)
+//   );
+// };
 
 /**
  * Publish a message to the message broker channel.
@@ -153,12 +153,12 @@ module.exports.SubscribeMessage = async (channel, service) => {
  * @param {string} service - Service name.
  * @param {string} msg - Message content.
  */
-module.exports.PublishMessage = (channel, service, msg) => {
-  try {
-    // Publishing the message to the specified exchange with the given routing key
-    channel.publish(EXCHANGE_NAME, service, Buffer.from(msg));
-    console.log("Sent:", msg);
-  } catch (err) {
-    console.error('Error publishing message:', err.message);
-  }
-};
+// module.exports.PublishMessage = (channel, service, msg) => {
+//   try {
+//     // Publishing the message to the specified exchange with the given routing key
+//     channel.publish(EXCHANGE_NAME, service, Buffer.from(msg));
+//     console.log("Sent:", msg);
+//   } catch (err) {
+//     console.error('Error publishing message:', err.message);
+//   }
+// };

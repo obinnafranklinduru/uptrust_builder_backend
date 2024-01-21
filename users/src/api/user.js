@@ -1,26 +1,30 @@
 const UserService = require("../services/user-service");
 const { SubscribeMessage } = require("../utils");
+const UserAuth = require('./middlewares/auth');
 const {
     userSignupSchema,
-    verificationCodeSchema,
+    basicContactSchema,
+    professionalSchema,
+    photosSchema,
+    userPasswordSchema,
+    validateData
 } = require("./validations")
 
 module.exports = (app, channel) => {
     const service = new UserService();
 
     // Subscribe to messages using the channel and service
-    SubscribeMessage(channel, service);
+    // SubscribeMessage(channel, service);
 
     // Route for user registration (sign up)
     app.post('/signup', async (req, res, next) => {
         try {
-            const { error, value } = userSignupSchema.validate(req.body);
-            if (error) throw new Error(error);
+            const value = await validateData(req.body, userSignupSchema);
             const data = await service.signUp(value);
-            await service.updateVerificationCode(data.user.id, data.user.email, data.user.firstName);
+            await service.updateVerificationCode(data.user._id);
             res.status(201).json(data);
         } catch (error) {
-            console.error('Error in /signup:', error);
+            next(error);
         }
     });
 
@@ -31,27 +35,29 @@ module.exports = (app, channel) => {
             const data = await service.signIn(email, password);
             res.status(200).json(data);
         } catch (error) {
-            console.error('Error in /login:', error);
+            next(error);
         }
     });
 
-    app.put('/verify-user', async (req, res, next) => {
+    app.put('/verify-user', UserAuth, async (req, res, next) => {
         try {
-            const { code, userId } = req.body;
+            const { userId } = req.user;
+            const { code } = req.body;
             const data = await service.updateVerifyCode(code, userId)
             res.status(200).json(data);
         } catch (error) {
-            console.error('Error in /verify-user:', error);
+            next(error);
         }
     })
 
-    app.post('/generate-otp', async (req, res, next) => {
+    app.get('/generate-otp', UserAuth, async (req, res, next) => {
         try {
-            const { userId } = req.body;
+            const { userId } = req.user;
             const result = await service.generateOtpRequest(userId);
+            if (!result) throw new Error("OTP request not sent successfully");
             res.json({ success: result, message: 'OTP request sent successfully' });
         } catch (error) {
-            console.error('Error in generateOtpRequest route:', error);
+            next(error);
         }
     });
 
@@ -59,19 +65,53 @@ module.exports = (app, channel) => {
         try {
             const { email } = req.body;
             const result = await service.generateOtpForgottenPassword(email);
-            res.json({ success: result, message: 'OTP request for forgotten password sent successfully' });
+            res.json({ token: result, message: 'OTP request for forgotten password sent successfully' });
         } catch (error) {
-            console.error('Error in generateOtpForgotten route:', error);
+            next(error);
         }
     });
 
-    app.post('/password-reset', async (req, res, next) => {
+    app.post('/password-reset', UserAuth, async (req, res, next) => {
         try {
-            const { userId, newPassword } = req.body;
+            const { userId } = req.user;
+            const newPassword = await validateData(req.body, userPasswordSchema);
             const result = await service.passwordReset(userId, newPassword);
             res.status(200).json(result);
         } catch (error) {
-            console.error('Error in password reset route:', error);
+            next(error);
+        }
+    });
+
+    app.post('/update-profile', UserAuth, async (req, res, next) => {
+        try {
+            const { userId } = req.user;
+            const data = await validateData(req.body, basicContactSchema);
+            const result = await service.updateUserProfile(userId, data);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
+    });
+
+    app.post('/update-professional', UserAuth, async (req, res, next) => {
+        try {
+            const { userId } = req.user;
+            const data = await validateData(req.body, professionalSchema);
+            const result = await service.updateProfessional(userId, data);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
+        }
+    });
+
+    app.post('/update-profile-photos', UserAuth, async (req, res, next) => {
+        try {
+            const { userId } = req.user;
+            const data = await validateData(req.body, photosSchema);
+            const result = await service.updateUserProfilePhotos(userId, data);
+            res.status(200).json(result);
+        } catch (error) {
+            next(error);
         }
     });
 

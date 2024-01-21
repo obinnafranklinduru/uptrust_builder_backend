@@ -1,50 +1,57 @@
-const { createLogger, transports } = require('winston');
-
-const logErrors = createLogger({
-    transports: [
-        new transports.Console(),
-        new transports.File({ filename: 'app_error.log' })
-    ]
-});
-
-class ErrorLogger {
-    constructor() {}
-
-    async logError(err) {
-        console.log('==================== Start Error Logger ===============');
-
-        logErrors.log({
-            private: true,
-            level: 'error',
-            message: `${new Date()}-${JSON.stringify(err)}`
-        });
-
-        console.log('==================== End Error Logger ===============');
-        return false;
-    }
-
-    isTrustedError(error) {
-        return error instanceof AppError && error.isOperational;
+class ErrorResponse extends Error {
+    constructor(message, statusCode) {
+        super(message);
+        this.statusCode = statusCode;
     }
 }
 
-const ErrorHandler = async (err, req, res, next) => {
-    const errorLogger = new ErrorLogger();
+const ErrorHandler = (err, req, res, next) => {
+    let error = { ...err };
+    error.message = err.message;
 
-    process.on('unhandledRejection', (reason, promise) => {
-        console.log(reason, 'UNHANDLED');
-        throw reason; // need to take care
-    });
+    // Duplicate key error (e.g., unique constraint violation)
+    if (err.code === 11000) {
+        let message = 'Duplication error';
+        Object.keys(err.keyValue).forEach((key) => {
+            message = `${key} already exists`;
+        });
 
-    process.on('uncaughtException', (err) => {
-        errorLogger.logError(err);
-    });
-
-    if (err) {
-        await errorLogger.logError(err);
-        return res.status(err.statusCode).json({ 'message': err.message });
+        error = new ErrorResponse(message, 400);
     }
-    next();
+
+    // Handle ZodError
+    if (err.name === 'ZodError') {
+        const message = err.issues[0].message || 'Validation error';
+        error = new ErrorResponse(message, 400);
+    }
+
+    // Handle ValidationError
+    if (err.name === 'ValidationError') {
+        let message = 'Validation error';
+        Object.keys(err.errors).forEach((field) => {
+            message = err.errors[field].message;
+        });
+        
+        error = new ErrorResponse(message, 400);
+    }
+
+    // Handle CastError
+    if (err.name === 'CastError') {
+        const field = err.path;
+        const message = `Invalid ${field}`;
+        error = new ErrorResponse(message, 400);
+    }
+    
+    // Handle other common error types
+    if (['TypeError', 'SyntaxError', 'StrictPopulateError'].includes(err.name)) {
+        const message = err.message;
+        error = new ErrorResponse(message, 400);
+    }
+
+    res.status(error.statusCode || 500).json({
+        success: false,
+        error: error.message || 'Internal server error'
+    });
 };
 
-module.exports = ErrorHandler;
+module.exports = { ErrorResponse, ErrorHandler };

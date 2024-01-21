@@ -46,6 +46,8 @@ const userSchema = new mongoose.Schema({
             delete ret.password;
             delete ret.salt;
             delete ret.verification_code;
+            delete ret.expiry;
+            delete ret.deleted;
         }
     },
     timestamps: true
