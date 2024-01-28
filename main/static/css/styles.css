@@ -1,0 +1,54 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+.emoji-container {
+    font-size: 2em;
+}
+
+.wave-emoji {
+    animation: wave-animation 2s infinite;
+}
+
+.smile-emoji {
+    margin-left: 10px;
+    animation: bounce-animation 1s infinite;
+}
+
+@keyframes wave-animation {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translate(0, 0);
+    }
+    40% {
+        transform: translate(0, -10px);
+    }
+    60% {
+        transform: translate(0, -5px);
+    }
+}
+
+@keyframes bounce-animation {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
