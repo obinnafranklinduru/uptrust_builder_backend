@@ -1,14 +1,14 @@
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f0f0f0;
-    margin: 0;
+    marg: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
 }
 
-.container {
+.contaer {
     text-align: center;
 }
 
@@ -16,17 +16,17 @@ h1 {
     color: #333;
 }
 
-.emoji-container {
+.emoji-contaer {
     font-size: 2em;
 }
 
 .wave-emoji {
-    animation: wave-animation 2s infinite;
+    animation: wave-animation 2s fite;
 }
 
 .smile-emoji {
-    margin-left: 10px;
-    animation: bounce-animation 1s infinite;
+    marg-left: 10px;
+    animation: bounce-animation 1s fite;
 }
 
 @keyframes wave-animation {

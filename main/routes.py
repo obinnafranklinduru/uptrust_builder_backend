@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('dex.html')
 
 """ MODEL ROUTES"""
 
@@ -27,5 +27,5 @@ def job_recommendation():
 """ Notifications """
 
 
-if __name__ == "__main__":
+if __name__ == "__ma__":
     app.run()
