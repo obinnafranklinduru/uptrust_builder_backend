@@ -1,23 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-# <a href="https://colab.research.google.com/github/obinnafranklinduru/uptrust_builder_backend/blob/nessa/NLP_Document_Parsing(2).ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
-
-# 2]:
-
-
-# 3]:
-
-
-
-
-# 4]:
-
-
-import sys
-
-
-# 5]:
 
 class main():
     with open(file_name, 'rb') as f:
@@ -511,5 +493,5 @@ class main():
 
         #('Your CV score is ' + str(df['Match'].sum()) + '/' + str(Total_kw) + '.')
         Total_kw = len(df['Keywords'])
-        return Total_kw
+        return [Total_kw, CV]
 

@@ -47,20 +47,8 @@ class AI_assistant():
 
     def cv_email(
             self,
-            company="Future Devs",
-            About="This is a Fin tech company that builds world solutions to quick payments. Modt especially in Africa",
-            job_description=
-                """
-                Front End Developer
-                Future Devs
-                Lagos
-                ₦250,000 - ₦300,000 a month
-                Full-time
-                Easily apply
-                Reports to: Back-end Lead.
-                Minimum: Proven experience as a frontend Experience developer.
-                Collaborate with designers, backend developers and other stakeholders
-                """, portfolio=""):
+            job_description="""
+                """, cv=""):
         openai.api_key = API_KEY
         messages = [
             {"role": "system", "content": "You are an Email writer, helping users write good, neat and appealing email"},
