@@ -16,6 +16,7 @@ def cv_analyser():
     PARAMETERS: CV document
                 Job requirements
     """
+    # TODO: JOB DESCRIPTION and CV
     user_cv = request.file('file')
     cv_rating = main.Cv_analyser(cv)
     return jsonify({'Rate': cv_rating,
