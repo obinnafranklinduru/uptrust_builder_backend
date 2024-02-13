@@ -1,8 +1,7 @@
-import openai
 import requests
 from dotenv import load_dotenv
+import requests
 import os
-
 load_dotenv()
 
 URL='https://api.openai.com/v1/chat/completions'
@@ -10,14 +9,14 @@ API_KEY=os.getenv('API_KEY')
 MODEL="gpt-3.5-turbo"
 
 class EmailGenerator:
-  """
-    EmailGenerator: EmailGenerator takes the job description, applicant's name, and email as input
+    """
+     EmailGenerator: EmailGenerator takes the job description, applicant's name, and email as input
                     and generates a customized email for job application using OpenAI's GPT-3 API.
-  """
-  def __init__(self, api_key=API_KEY):
-      openai.api_key = api_key
-
-  def generate_email(self, job_description, applicant_name, applicant_email):
+    """
+    def __init__(self, api_key=API_KEY):
+        self.api_key = api_key
+     
+    def generate_email(self, job_description, applicant_name, applicant_email):
       # Crafting email template
       email_template = f"""Dear Hiring Manager,\n\nI am writing to express my interest in the {job_description['title']} position at {job_description['company']} as advertised on {job_description['source']}./
                         \n\nBased on the job description, I believe that my {', '.join(job_description['skills'])} skills make me a strong candidate for this role./
@@ -27,38 +26,47 @@ class EmailGenerator:
 
       # Generating email content using GPT-3
       prompt = f"""Generate an email for a job application based on the following job description:\n\n/
-                Job Title: {job_description['title']}\nCompany: {job_description['company']}\n/
-                Skills: {', '.join(job_description['skills'])}\nExperience: {', '.join(job_description['experience'])}\n/
-                Source: {job_description['source']}\n\nApplicant Name: {applicant_name}\nApplicant Email: {applicant_email}\n\n/
-                Email Template:\n{email_template}\n\n"""
+                    Job Title: {job_description['title']}\nCompany: {job_description['company']}\n/
+                    Skills: {', '.join(job_description['skills'])}\nExperience: {', '.join(job_description['experience'])}\n/
+                    Source: {job_description['source']}\n\nApplicant Name: {applicant_name}\nApplicant Email: {applicant_email}\n\n/
+                    Email Template:\n{email_template}\n\n"""
 
-      response = openai.Completion.create(
-          engine="text-davinci-003",
-          prompt=prompt,
-          temperature=0.7,
-          max_tokens=200
-      )
-      generated_email = response.choices[0].text.strip()
+      headers = {
+         "Content-Type": "appliation/json",
+         "Authorization": f"Bearer {self.api_key}"
+      }
       
-      return generated_email
+      payload = {
+         'model': MODEL,
+         'prompt': prompt,
+         'temperature': 0.7,
+         'max_tokens': 200
+        }
+      response = requests.post(url=URL, headers=headers, json=payload)
 
-# Example usage:
-# api_key = "your_openai_api_key"
-# generator = EmailGenerator(api_key)
+      if response.status_code == 200:
+        result = response.json()
+        generated_email = result['choices'][0]['text'].strip()
+        return generated_email
+      else:
+        print("Error:", response.text)
+        return None
 
-# job_description = {
-#     "title": "Software Engineer",
-#     "company": "ABC Tech",
-#     "skills": ["Python", "JavaScript", "SQL"],
-#     "experience": ["Full-stack development", "Agile methodologies"],
-#     "source": "LinkedIn"
-# }
+generator = EmailGenerator()
 
-# applicant_name = "John Doe"
-# applicant_email = "john.doe@example.com"
+job_description = {
+    "title": "Software Engineer",
+    "company": "ABC Tech",
+    "skills": ["Python", "JavaScript", "SQL"],
+    "experience": ["Full-stack development", "Agile methodologies"],
+    "source": "LinkedIn"
+}
 
-# generated_email = generator.generate_email(job_description, applicant_name, applicant_email)
-# print(generated_email)
+applicant_name = "John Doe"
+applicant_email = "john.doe@example.com"
+
+generated_email = generator.generate_email(job_description, applicant_name, applicant_email)
+print(generated_email)
 
 
 # portfolio = """
