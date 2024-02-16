@@ -1,0 +1,802 @@
+{
+  "collection": {
+    "info": {
+      "_postman_id": "36a902bf-8a55-4790-bef0-df8c028efefc",
+      "name": "UpTrust User-Service API Documentation",
+      "description": "This API collection provides comprehensive endpoints to facilitate user management, including user registration, authentication, password management, and profile updates. Additionally, it covers features such as managing user addresses, education details, work experiences, skill sets, and social media handlers. Explore the diverse set of routes to seamlessly integrate user-related functionalities into your application. Ensure a smooth user experience by leveraging these endpoints for a robust and secure user management system.",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "updatedAt": "2024-02-16T11:55:43.000Z",
+      "uid": "26953456-36a902bf-8a55-4790-bef0-df8c028efefc",
+      "createdAt": null,
+      "lastUpdatedBy": null
+    },
+    "item": [
+      {
+        "name": "User Routes",
+        "item": [
+          {
+            "name": "Register User",
+            "id": "ba2905f2-859a-443c-a72d-c1708ea95b22",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"email\": \"\",\r\n    \"password\": \"\",\r\n    \"phone\": \"\"\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/register",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["register"]
+              },
+              "description": "Register a new user with the provided credentials. Returns user information upon successful registration."
+            },
+            "response": [],
+            "uid": "26953456-ba2905f2-859a-443c-a72d-c1708ea95b22"
+          },
+          {
+            "name": "Login User",
+            "id": "5d02cec1-5d74-4d5c-8f04-bbea89fa8249",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"email\": \"\",\r\n    \"password\": \"\"\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/login",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["login"]
+              },
+              "description": "Log in with the user's credentials. Returns authentication token upon successful login."
+            },
+            "response": [],
+            "uid": "26953456-5d02cec1-5d74-4d5c-8f04-bbea89fa8249"
+          },
+          {
+            "name": "Verify User",
+            "id": "9ca388d7-174e-47de-bd74-9bb838b5ab82",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"code\": \"\"\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/verify-user",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["verify-user"]
+              },
+              "description": "For verification code retrieval, authenticate and obtain the verification code for account confirmation."
+            },
+            "response": [],
+            "uid": "26953456-9ca388d7-174e-47de-bd74-9bb838b5ab82"
+          },
+          {
+            "name": "Verify User",
+            "id": "e35a3375-a5fe-43eb-a78e-17e5f73f2902",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "GET",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/verify-user",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["verify-user"]
+              },
+              "description": "For sending registered user verification code via email, required authentication."
+            },
+            "response": [],
+            "uid": "26953456-e35a3375-a5fe-43eb-a78e-17e5f73f2902"
+          },
+          {
+            "name": "Forgotten Password",
+            "id": "37c7fc64-ce77-44be-8d42-ad9a4543c8be",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"email\": \"\"\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/forgotten-password",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["forgotten-password"]
+              },
+              "description": "Sends an email with a link and access token to start the password reset process."
+            },
+            "response": [],
+            "uid": "26953456-37c7fc64-ce77-44be-8d42-ad9a4543c8be"
+          },
+          {
+            "name": "Password Reset",
+            "id": "198ec5af-d682-4046-bed3-326e62d263c0",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\"password\": \"\"}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/reset-password",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["reset-password"]
+              },
+              "description": "Reset the user's password. Requires authentication and a valid reset token. Use this endpoint to securely update the user's password."
+            },
+            "response": [],
+            "uid": "26953456-198ec5af-d682-4046-bed3-326e62d263c0"
+          },
+          {
+            "name": "Update User",
+            "id": "e0757057-9f8c-4bed-8e46-f57b31a4083b",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"\",\r\n    \"profilePic\":\"\", \r\n    \"headline\":\"\"\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/update-account",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["update-account"]
+              },
+              "description": "Update user account information. Requires authentication for security. Provide the necessary details to modify the user's profile."
+            },
+            "response": [],
+            "uid": "26953456-e0757057-9f8c-4bed-8e46-f57b31a4083b"
+          },
+          {
+            "name": "Get User Profile",
+            "id": "1ee3e8cb-0321-4346-a6f5-4cc61bb3d7ce",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/profile",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["profile"]
+              },
+              "description": "Retrieve user profile information. Requires authentication to ensure data privacy. Get details such as name, email, and other profile information."
+            },
+            "response": [],
+            "uid": "26953456-1ee3e8cb-0321-4346-a6f5-4cc61bb3d7ce"
+          }
+        ],
+        "id": "6c62bd74-34c4-462a-a9af-41237887c3af",
+        "description": "- `POST /register`: Register a new user.\n- `POST /login`: Log in with user credentials.\n- `POST /forgotten-password`: Send an email with an access token link to initiate the process to reset a forgotten password.\n- `PUT /reset-password`: Reset user password (requires authentication).\n- `PUT /update-account`: Update user account information (requires authentication).\n- `GET /profile`: Get user profile information (requires authentication).\n- `POST /verify-user`: Validate verification code and verify the user account (requires authentication).\n    \n- `GET /verify-user`: Send verification code (requires authentication).",
+        "auth": {
+          "type": "bearer",
+          "bearer": [{ "key": "token", "value": "", "type": "string" }]
+        },
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "2d5800fe-0be6-4351-af4f-1a6efd9f5e9b",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          },
+          {
+            "listen": "test",
+            "script": {
+              "id": "35b2847c-d0bd-4b04-b24d-f2118a1c4a64",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          }
+        ],
+        "uid": "26953456-6c62bd74-34c4-462a-a9af-41237887c3af"
+      },
+      {
+        "name": "Address Routes",
+        "item": [
+          {
+            "name": "Add Addresses",
+            "id": "d6147268-f594-4b37-b0f6-4a90ee1c9181",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"addressLine1\": \"\",\r\n    \"addressLine2\": \"\",\r\n    \"city\": \"\",\r\n    \"postCode\": \"\",\r\n    \"country\": \"\"\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/address",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["address"]
+              },
+              "description": "Create a new address entry for the authenticated user. Provide the necessary details to add a new address to the user's profile"
+            },
+            "response": [],
+            "uid": "26953456-d6147268-f594-4b37-b0f6-4a90ee1c9181"
+          },
+          {
+            "name": "Get Address",
+            "id": "bc324b7f-11ab-46ea-8f84-3b0fce729a8c",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/address",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["address"]
+              },
+              "description": "Retrieve the address details for the authenticated user. Returns information such as street address, city, state, and postal code."
+            },
+            "response": [],
+            "uid": "26953456-bc324b7f-11ab-46ea-8f84-3b0fce729a8c"
+          },
+          {
+            "name": "Update Address",
+            "id": "760eab6e-b23e-4d89-9cdd-c5a4d7ff3ad6",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"addressLine1\": \"\"\r\n\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/address",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["address"]
+              },
+              "description": "Update the address details for the authenticated user. Requires authentication and provides the updated address information."
+            },
+            "response": [],
+            "uid": "26953456-760eab6e-b23e-4d89-9cdd-c5a4d7ff3ad6"
+          },
+          {
+            "name": "Delete Address",
+            "id": "1c61ff85-740b-4fd4-b9c3-3f59c9d57e92",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/address",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["address"]
+              },
+              "description": "Delete the address entry for the authenticated user. Requires authentication to ensure authorized access for deletion."
+            },
+            "response": [],
+            "uid": "26953456-1c61ff85-740b-4fd4-b9c3-3f59c9d57e92"
+          }
+        ],
+        "id": "c79e7ea0-7b84-436a-9979-685e55a89917",
+        "description": "- `POST /address`: Create a new address for the authenticated user.\n    \n- `GET /address`: Get the address details for the authenticated user.\n    \n- `PUT /address`: Update the address details for the authenticated user.\n    \n- `DELETE /address`: Delete the address for the authenticated user.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            { "key": "token", "value": "{{ACCESS_TOKEN}}", "type": "string" }
+          ]
+        },
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "24c50196-ef4e-48b9-95bf-db05f2a1f4a2",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          },
+          {
+            "listen": "test",
+            "script": {
+              "id": "ea2b1e00-40f3-4044-8d9b-1c1d152cb447",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          }
+        ],
+        "uid": "26953456-c79e7ea0-7b84-436a-9979-685e55a89917"
+      },
+      {
+        "name": "Education Routes",
+        "item": [
+          {
+            "name": "Add Education Details",
+            "id": "7c7f08eb-3e19-4bc0-bc7d-89a0cb5fbfbc",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"degree\": \"\",\r\n    \"institution\": \"\",\r\n    \"fieldofstudy\": \"\",\r\n    \"startYear\": \"\",\r\n    \"endYear\": \"\",\r\n    \"institutionWebsite\": \"\",\r\n    \"description\": \"\"\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/education",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["education"]
+              },
+              "description": "Add a new education entry to the user's profile. Provide details such as institution, degree, and graduation year."
+            },
+            "response": [],
+            "uid": "26953456-7c7f08eb-3e19-4bc0-bc7d-89a0cb5fbfbc"
+          },
+          {
+            "name": "Get Education Detail",
+            "id": "648fdb56-d57c-486a-8027-ea97c8d0deb0",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/education/:{{id}}",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["education", ":{{id}}"],
+                "variable": [{ "key": "{{id}}", "value": "" }]
+              },
+              "description": "Retrieve details of a specific education entry for the authenticated user. Requires authentication and the education ID"
+            },
+            "response": [],
+            "uid": "26953456-648fdb56-d57c-486a-8027-ea97c8d0deb0"
+          },
+          {
+            "name": "Update Education Detail",
+            "id": "b690dffb-0c2b-4236-9d7a-4b209e4104fc",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "PUT",
+              "header": [{ "key": "", "value": "", "type": "text" }],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"degree\": \"\"\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/education/:{{id}}",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["education", ":{{id}}"],
+                "variable": [{ "key": "{{id}}", "value": "" }]
+              },
+              "description": "Update details of a specific education entry for the authenticated user. Requires authentication and the education ID."
+            },
+            "response": [],
+            "uid": "26953456-b690dffb-0c2b-4236-9d7a-4b209e4104fc"
+          },
+          {
+            "name": "Delete Education Detail",
+            "id": "2cc8f2bb-7307-4fea-99c4-82d5cf0ebbd0",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/education/:{{id}}",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["education", ":{{id}}"],
+                "variable": [{ "key": "{{id}}", "value": "" }]
+              },
+              "description": "Delete a specific education entry for the authenticated user. Requires authentication and the education ID for deletion."
+            },
+            "response": [],
+            "uid": "26953456-2cc8f2bb-7307-4fea-99c4-82d5cf0ebbd0"
+          }
+        ],
+        "id": "48393655-edbc-408e-a946-e6e1ee85a6fd",
+        "description": "- `POST /education`: Add a new education entry for the authenticated user.\n    \n- `GET /education/:id`: Get details of a specific education entry (requires authentication).\n    \n- `PUT /education/:id`: Update a specific education entry (requires authentication).\n    \n- `DELETE /education/:id`: Delete a specific education entry (requires authentication).",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            { "key": "token", "value": "{{ACCESS_TOKEN}}", "type": "string" }
+          ]
+        },
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "de134e3c-ebe2-4dbd-b3c2-b9f46af11cbc",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          },
+          {
+            "listen": "test",
+            "script": {
+              "id": "a564ce09-4bc9-4f4a-8766-916ddc7aab91",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          }
+        ],
+        "uid": "26953456-48393655-edbc-408e-a946-e6e1ee85a6fd"
+      },
+      {
+        "name": "Experience Routes",
+        "item": [
+          {
+            "name": "Add Experience Details",
+            "id": "7d70e1af-7a2d-4c39-9972-6fd976aec124",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"jobTitle\": \"\",\r\n    \"company\": \"\",\r\n    \"startDate\": \"\",\r\n    \"endDate\": \"\",\r\n    \"location\": \"\",\r\n    \"description\": \"\"\r\n  }",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/experience",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["experience"]
+              },
+              "description": "Add a new work experience entry to the user's profile. Provide details such as company, and job title."
+            },
+            "response": [],
+            "uid": "26953456-7d70e1af-7a2d-4c39-9972-6fd976aec124"
+          },
+          {
+            "name": "Get Experience Detail",
+            "id": "12a4be62-5e49-4565-934f-49bbf530b021",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/experience/:{{id}}",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["experience", ":{{id}}"],
+                "variable": [{ "key": "{{id}}", "value": "" }]
+              },
+              "description": "Retrieve details of a specific work experience entry for the authenticated user. Requires authentication and the experience ID."
+            },
+            "response": [],
+            "uid": "26953456-12a4be62-5e49-4565-934f-49bbf530b021"
+          },
+          {
+            "name": "Update Experience Detail",
+            "id": "57a7f654-a119-4b19-9120-c1c0441a52ea",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"jobTitle\": \"\"\r\n  }",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/experience/:{{id}}",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["experience", ":{{id}}"],
+                "variable": [{ "key": "{{id}}", "value": "" }]
+              },
+              "description": "Update details of a specific work experience entry for the authenticated user. Requires authentication and the experience ID."
+            },
+            "response": [],
+            "uid": "26953456-57a7f654-a119-4b19-9120-c1c0441a52ea"
+          },
+          {
+            "name": "Delete Experience Detail",
+            "id": "b977c232-b9c8-4205-a70c-b7498207e451",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/experience/:{{id}}",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["experience", ":{{id}}"],
+                "variable": [{ "key": "{{id}}", "value": "" }]
+              },
+              "description": "Delete a specific work experience entry for the authenticated user. Requires authentication and the experience ID for deletion."
+            },
+            "response": [],
+            "uid": "26953456-b977c232-b9c8-4205-a70c-b7498207e451"
+          }
+        ],
+        "id": "d9b89c27-cb89-482c-bbc8-bc8b5be856f5",
+        "description": "- `POST /experience`: Add a new work experience entry for the authenticated user.\n    \n- `GET /experience/:id`: Get details of a specific work experience entry (requires authentication).\n    \n- `PUT /experience/:id`: Update a specific work experience entry (requires authentication).\n    \n- `DELETE /experience/:id`: Delete a specific work experience entry (requires authentication).",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            { "key": "token", "value": "{{ACCESS_TOKEN}}", "type": "string" }
+          ]
+        },
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "31328a9c-ac55-44ec-a0d1-63fff6f55745",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          },
+          {
+            "listen": "test",
+            "script": {
+              "id": "522f670d-6d5d-4d07-849f-599186557f8d",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          }
+        ],
+        "uid": "26953456-d9b89c27-cb89-482c-bbc8-bc8b5be856f5"
+      },
+      {
+        "name": "Skill-Set Routes",
+        "item": [
+          {
+            "name": "Add Skills",
+            "id": "08645fc6-b8f2-4b42-9b18-8d74efc32654",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"name\": \"\",\r\n    \"level\": \"\",\r\n    \"description\": \"\"\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/skill-set",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["skill-set"]
+              },
+              "description": "Add a new skill set entry to the user's profile. Provide details such as skill names and proficiency levels."
+            },
+            "response": [],
+            "uid": "26953456-08645fc6-b8f2-4b42-9b18-8d74efc32654"
+          },
+          {
+            "name": "Get Skill",
+            "id": "39c4a3b9-b811-4943-9d1a-c449800a3fbb",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/skill-set/:{{id}}",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["skill-set", ":{{id}}"],
+                "variable": [{ "key": "{{id}}", "value": "" }]
+              },
+              "description": "Retrieve details of a specific skill set entry for the authenticated user. Requires authentication and the skill set ID."
+            },
+            "response": [],
+            "uid": "26953456-39c4a3b9-b811-4943-9d1a-c449800a3fbb"
+          },
+          {
+            "name": "Update Skill",
+            "id": "fc7fdb5d-bfdb-4f92-b187-0e7f09fc9616",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"name\": \"python\"\r\n}",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/skill-set/:{{id}}",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["skill-set", ":{{id}}"],
+                "variable": [{ "key": "{{id}}", "value": "" }]
+              },
+              "description": "Update details of a specific skill set entry for the authenticated user. Requires authentication and the skill set ID."
+            },
+            "response": [],
+            "uid": "26953456-fc7fdb5d-bfdb-4f92-b187-0e7f09fc9616"
+          },
+          {
+            "name": "Delete Skill",
+            "id": "c19a8107-5fd3-4a7c-b5cf-9d1c7523c136",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/skill-set/:{{id}}",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["skill-set", ":{{id}}"],
+                "variable": [{ "key": "{{id}}", "value": "" }]
+              },
+              "description": "Delete a specific skill set entry for the authenticated user. Requires authentication and the skill set ID for deletion."
+            },
+            "response": [],
+            "uid": "26953456-c19a8107-5fd3-4a7c-b5cf-9d1c7523c136"
+          }
+        ],
+        "id": "9de21220-68c1-4f51-bf13-ba4b59b2d06c",
+        "description": "- `POST /skill-set`: Add a new skill set entry for the authenticated user.\n    \n- `GET /skill-set/:id`: Get details of a specific skill set entry (requires authentication).\n    \n- `PUT /skill-set/:id`: Update a specific skill set entry (requires authentication).\n    \n- `DELETE /skill-set/:id`: Delete a specific skill set entry (requires authentication).",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            { "key": "token", "value": "{{ACCESS_TOKEN}}", "type": "string" }
+          ]
+        },
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "1ce79a14-3f90-4918-afad-52b9a8c20a10",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          },
+          {
+            "listen": "test",
+            "script": {
+              "id": "cb2d86ce-be9c-4898-bbac-21c5168d06a1",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          }
+        ],
+        "uid": "26953456-9de21220-68c1-4f51-bf13-ba4b59b2d06c"
+      },
+      {
+        "name": "Social-Handler Routes",
+        "item": [
+          {
+            "name": "Add Social Handlers",
+            "id": "d8c0f176-b530-47e5-a509-bd90afd1b09e",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "POST",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"facebook\": \"\",\r\n    \"linkedin\": \"\",\r\n    \"twitter\": \"\",\r\n    \"portfolioUrl\": \"\",\r\n    \"githubUrl\": \"\"\r\n  }",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/social-handler",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["social-handler"]
+              },
+              "description": "Add social media handler links for the authenticated user. Provide details such as links to Facebook, LinkedIn, Twitter, etc."
+            },
+            "response": [],
+            "uid": "26953456-d8c0f176-b530-47e5-a509-bd90afd1b09e"
+          },
+          {
+            "name": "Get Social Handler",
+            "id": "1e34a4f4-e3d9-4bb2-8179-e61ebe8e46ff",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "GET",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/social-handler",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["social-handler"]
+              },
+              "description": "Retrieve social media handler links for the authenticated user. Returns links to various social media profiles."
+            },
+            "response": [],
+            "uid": "26953456-1e34a4f4-e3d9-4bb2-8179-e61ebe8e46ff"
+          },
+          {
+            "name": "Update Social Handler",
+            "id": "e351adaf-a22d-48cf-bc6c-37d3b7bee07d",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "PUT",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "{\r\n    \"facebook\": \"\"\r\n  }",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "{{USER-SERVICE}}/social-handler",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["social-handler"]
+              },
+              "description": "Update social media handler links for the authenticated user. Requires authentication and provides the updated links."
+            },
+            "response": [],
+            "uid": "26953456-e351adaf-a22d-48cf-bc6c-37d3b7bee07d"
+          },
+          {
+            "name": "Delete Social Handler",
+            "id": "51e10f58-61f6-48a5-b8a3-ce95c41aec2b",
+            "protocolProfileBehavior": { "disableBodyPruning": true },
+            "request": {
+              "method": "DELETE",
+              "header": [],
+              "url": {
+                "raw": "{{USER-SERVICE}}/social-handler",
+                "host": ["{{USER-SERVICE}}"],
+                "path": ["social-handler"]
+              },
+              "description": "Delete social media handler links for the authenticated user. Requires authentication for secure removal of social media links."
+            },
+            "response": [],
+            "uid": "26953456-51e10f58-61f6-48a5-b8a3-ce95c41aec2b"
+          }
+        ],
+        "id": "cc4bc1de-d0a5-4983-9cf4-29583b6d0fd7",
+        "description": "- `POST /social-handler`: Add social media handler links for the authenticated user.\n    \n- `GET /social-handler`: Get social media handler links for the authenticated user.\n    \n- `PUT /social-handler`: Update social media handler links for the authenticated user.\n    \n- `DELETE /social-handler`: Delete social media handler links for the authenticated user.",
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            { "key": "token", "value": "{{ACCESS_TOKEN}}", "type": "string" }
+          ]
+        },
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "id": "7f261ac8-fc5c-447a-b01e-47766a22beeb",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          },
+          {
+            "listen": "test",
+            "script": {
+              "id": "4c7bff91-fad2-4392-9077-a67e1cc078de",
+              "type": "text/javascript",
+              "exec": [""]
+            }
+          }
+        ],
+        "uid": "26953456-cc4bc1de-d0a5-4983-9cf4-29583b6d0fd7"
+      }
+    ],
+    "event": [
+      {
+        "listen": "prerequest",
+        "script": {
+          "id": "54333177-fc51-480a-bebc-fc95617c5057",
+          "type": "text/javascript",
+          "exec": [""]
+        }
+      },
+      {
+        "listen": "test",
+        "script": {
+          "id": "a0c2a7b8-232b-4ed4-a770-8763f8048bbd",
+          "type": "text/javascript",
+          "exec": [""]
+        }
+      }
+    ],
+    "variable": [
+      { "key": "USER", "value": "http://localhost:3000" },
+      {
+        "key": "USER-SERVICE",
+        "value": "https://uptrust-service-api.onrender.com"
+      },
+      { "key": "ACCESS_TOKEN", "value": "null", "type": "string" }
+    ]
+  }
+}
