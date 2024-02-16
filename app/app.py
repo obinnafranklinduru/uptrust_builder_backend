@@ -9,28 +9,30 @@ from config import app, db, Email
 
 """ FORMS """
 
-class Uploade_CV(FlaskForm):
-    cv_file = FileField("CV")
-    submit = SubmitField("Upload Cv")
+app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return "Hello There"
+#Flask app actions
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+#     if request.method == 'POST':
+#         user_cv = request.files['cv']
+#         user_cv_text = extract_text_from_pdf(user_cv) #Extracts text from the pdf file
+#         user_job_description = request.form['job_description']
 
+#         #Calling the preprocessing function on user input
+#         user_cv_text = preprocess_text(user_cv_text)
+#         user_job_description = preprocess_text(user_job_description)
 
-@app.route('/cv-analyser', methods=['POST', 'GET'])
-def cv_analyser():
-    """
-    Using CV model over here
-    PARAMETERS: CV document
-                Job requirements
-    """
-    file = Uploade_CV()
-    cv_file = file.cv_file.get()
+#         # Feature Extraction for User Input
+#         user_combined_features = vectorizer.transform([user_cv_text + ' ' + user_job_description])
 
-    # with open()
-    return jsonify({'Rate': cv_file,
-                    'status_code': 200})
+#         # Prediction
+#         prediction = model.predict(user_combined_features)[0]
+
+#         return render_template('results.html', prediction=prediction)
+
+#     return render_template('index.html')
+
 
 @app.route('/email-writer', methods=['POST', 'GET'])
 def email_writer():
