@@ -6,10 +6,9 @@
   "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only ",
-    "depoly": "ts-node src/server.ts",
-    "start": "node build/src/server.js",
-    "build": "yarn install && yarn build:server",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "start": "node build/server.js",
+    "build": "npm install && npm run build:server",
     "build:server": "tsc"
   },
   "keywords": [],
