@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 import os
 from flask_sqlalchemy import SQLAlchemy
 # from flask_jwt import JWT
-import jwt
+from flask_jwt_extended import JWTManager
 from functools import wraps
 
 """ CONFIG """
@@ -11,32 +11,14 @@ app = Flask(__name__)
 secret_key = os.getenv("SECRET_KEY")
 
 app.config["SECRET_KEY"] = secret_key
-# jwt = JWT(app)
+app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY") # create a .env file to store the secret key
 
-app.config["UOLOAD_FOLDER"] = os.path.abspath("uploaded_file")
+app.config["UOLOAD_FOLDER"] = os.path.abspath("")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///upthrust.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-
-def verify(func):
-    @wraps
-    def wrapper():
-        token = request.headers.get('authorization')
-        
-        if not token:
-            return jsonify({'message': 'Token is missing'}), 401
-            
-        try:
-            payload = jwt.decode(token.split(" ")[1], secret_key, algorithms=["HS256"])
-            print(payload)
-            return func(*args, **kwargs)  # Call the wrapped function
-        
-        except jwt.ExpiredSignatureError:
-            raise ValueError("token expired")
-        except jwt.InvalidTokenError:
-            raise ValueError("invalid token")
-
+jwt = JWTManager(app)
 
 """ MODEL """
 

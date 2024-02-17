@@ -3,13 +3,20 @@ from emails import EmailGenerator
 from nessa import CvAnalyser
 import logging, json, requests
 from config import app, db, Email, CVFile
+from flask_jwt_extended import verify_jwt_in_request, decode_token
 # from collections.abc import Mapping
 
 
 """ ROUTES """
 
+@verify_jwt_in_request
+@decode_token(allow_expired=False)
+def home():
+    return "HEllo World"
+
+@verify_jwt_in_request
+@decode_token(allow_expired=False)
 @app.route('/cv_analyser', methods=['POST'])
-# @verify
 def cv_analyser():
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'})
@@ -32,7 +39,8 @@ def cv_analyser():
         return jsonify({'message': 'File uploaded and saved to database successfully',
                         'result': f'{score}'})
 
-
+@verify_jwt_in_request
+@decode_token(allow_expired=False)
 @app.route('/email-writer', methods=['POST', 'GET'])
 # @verify
 def email_writer():
