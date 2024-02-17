@@ -49,7 +49,7 @@ class EmailGenerator:
         generated_email = result['choices'][0]['text'].strip()
         return generated_email
       else:
-        print("Error:", response.text)
+        #("Error:", response.text)
         return None
 
 generator = EmailGenerator()
@@ -66,7 +66,7 @@ applicant_name = "John Doe"
 applicant_email = "john.doe@example.com"
 
 generated_email = generator.generate_email(job_description, applicant_name, applicant_email)
-print(generated_email)
+#(generated_email)
 
 
 # portfolio = """
@@ -127,4 +127,4 @@ print(generated_email)
 #               -----------
 #               Available upon request.
 #             """
-# print(assistant.cv_email(portfolio=portfolio))
+# #(assistant.cv_email(portfolio=portfolio))

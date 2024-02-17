@@ -24,10 +24,11 @@ def CvAnalyser(cv_file_name=os.path.abspath(r"C:\Users\USER\uptrust_builder_back
         text = ''
         for page in reader.pages:
             text += page.extract_text() #this (+=) adds text extracted from each page of the doc into one single variable (text)
-            print(text)
+            # print(text)
 
         #splitting the text into lines for easier processing
         lines = text.split('\n')
+        # print(lines)
 
         #variables where extracted information would be stored
         experience = ''
@@ -42,26 +43,29 @@ def CvAnalyser(cv_file_name=os.path.abspath(r"C:\Users\USER\uptrust_builder_back
         #looping through `lines` to extract information under each section
         for line in lines:
             #extracting info in the SKILLS section
-            if 'SKILLS' in line:
+            if 'SKILLS' in line.upper():
                 extract_experience = False
                 extract_skills = True
                 extract_education = False
                 continue  # Skip this line
-
-           #extracting info in the EDUCATION section
-            elif 'EDUCATION' in line:
+            
+            #extracting info in the EDUCATION section
+            elif 'EDUCATION' in line.upper():
                 extract_experience = False
                 extract_skills = False
                 extract_education = True
                 continue  # Skip this line
 
-                #extracting info in the EXPERIENCE section
-            elif 'EXPERIENCE' in line:
+            #extracting info in the EXPERIENCE section
+            elif 'EXPERIENCE' in line.upper():
                 extract_experience = True
                 extract_skills = False
                 extract_education = False
                 continue  # Skip this line
 
+            print(extract_skills)
+            print(extract_education)
+            print(extract_experience)
             # Extract information based on the active section flag
             if extract_experience:
                 experience += line + '\n'
@@ -392,10 +396,10 @@ def CvAnalyser(cv_file_name=os.path.abspath(r"C:\Users\USER\uptrust_builder_back
 
 
     Total_kw = len(df['Keywords'])
-    return {df['Match'].sum(), Total_kw}
+    return [df['Match'].sum(), Total_kw]
 
     #('Your CV score is ' + str(df['Match'].sum()) + '/' + str(Total_kw) + '.')
 
 
 
-print(CvAnalyser())
+# print(CvAnalyser())
