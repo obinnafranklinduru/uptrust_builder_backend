@@ -30,6 +30,7 @@ export const GetToken = ({ _id, email, phone }: Partial<IUserModel>) => {
     APP_SECRET,
     {
       expiresIn: "30d",
+      algorithm: "HS256",
     }
   );
 };
