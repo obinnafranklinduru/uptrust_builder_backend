@@ -1,51 +1,68 @@
+import os
 from flask import request, jsonify
 from emails import EmailGenerator
 from nessa import CvAnalyser
 import logging, json, requests
-from config import app, db, Email, CVFile
-from flask_jwt_extended import verify_jwt_in_request, decode_token
+from config import app, db, Email, CVFile, verify_token
+from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
 # from collections.abc import Mapping
 
 
 """ ROUTES """
 
-@verify_jwt_in_request
-@decode_token(allow_expired=False)
+@app.route('/', methods=['GET'], endpoint='home')
 def home():
-    return "HEllo World"
+    verification_result, decoded_payload_or_error = verify_token()
+    if verification_result:
+        return "HEllo World"
+    else:
+        return f"Token Verification Failed: {decoded_payload_or_error}", 401
 
-@verify_jwt_in_request
-@decode_token(allow_expired=False)
-@app.route('/cv_analyser', methods=['POST'])
+@app.route('/cv_analyser', methods=['POST', 'GET'], endpoint='cv_analyser')
 def cv_analyser():
+    verification_result, decoded_payload_or_error = verify_token()
+    if not verification_result:
+        return f"Token Verification Failed: {decoded_payload_or_error}", 401
+
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'})
     file = request.files['file']
     if file.filename == '':
         return jsonify({'error': 'No selected file'})
     if file:
+        _id = decoded_payload_or_error[0]
+        email = decoded_payload_or_error[1]
+        
         file_content = file.read()  # Read the file content
-        email_address = request.form.get("email_address")
-        user_id = request.form.get("user_id")
-        # Call CvAnalyser function
-        file.save('cv_file.pdf')
+        print(os.getcwd)
+        path = os.getcwd() + 'cv_file.pdf'
+        print(path)
+
+        with open(path, 'wb') as f:
+            f.write(file_content)
+
+        with open(path, 'rb') as f:
+            saved_file_content = f.read()
+            print(saved_file_content)
+
         score = CvAnalyser()[0]
 
         # Save file to the database
-        cv_file = CVFile(file_name=file.filename, file_data=file_content, email_address=email_address, score=score, user_id=user_id)
+        cv_file = CVFile(file_name=file.filename, file_data=file_content, email_address=email, score=score, user_id=_id)
         db.session.add(cv_file)
         db.session.commit()
 
         return jsonify({'message': 'File uploaded and saved to database successfully',
                         'result': f'{score}'})
 
-@verify_jwt_in_request
-@decode_token(allow_expired=False)
-@app.route('/email-writer', methods=['POST', 'GET'])
-# @verify
+@app.route('/email-writer', methods=['POST', 'GET'], endpoint='email_writer')
 def email_writer():
     # Check if user.id of student has a CV stored in the database
     # Else Cv is necessary
+    verification_result, decoded_payload_or_error = verify_token()
+    if not verification_result:
+        return f"Token Verification Failed: {decoded_payload_or_error}", 401
+
 
     """ Generate the Email
     """
