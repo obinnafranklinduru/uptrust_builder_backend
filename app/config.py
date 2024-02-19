@@ -54,7 +54,7 @@ class Email:
         self.job_description = job_description
         self.date_time = datetime.now()
 
-class CVFile:
+class CV_File:
     def __init__(self, user_id, file_name, file_data, score, email_address):
         self.user_id = user_id
         self.file_name = file_name

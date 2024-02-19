@@ -3,7 +3,7 @@ from flask import request, jsonify
 from emails import EmailGenerator
 from nessa import CvAnalyser
 import logging, json
-from config import app, mongo, Email, CVFile, verify_token
+from config import app, mongo, Email, CV_File, verify_token
 
 
 """ ROUTES """
@@ -41,13 +41,15 @@ def cv_analyser():
 
         with open(path, 'rb') as f:
             saved_file_content = f.read()
-            # print(saved_file_content)
 
-        score = CvAnalyser()
+        score = int(CvAnalyser()[0])
+        t_score = int(CvAnalyser()[1])
+        print(type(score))
+        print(type(t_score))
 
         # Save file to the database
-        cv_user = CVFile(file_name=file.filename, file_data=file_content, email_address=email, score=score, user_id=_id)
-        mongo.db.emails.insert_one(cv_user.__dict__)
+        cv_user = CV_File(file_name=file.filename, file_data=saved_file_content, email_address=email, score={'score': score, 't_score': t_score}, user_id=_id)
+        mongo.db.cv_files.insert_one(cv_user.__dict__)
 
         return jsonify({'message': 'File uploaded and saved to database successfully',
                         'result': f'{score}'})
