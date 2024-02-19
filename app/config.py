@@ -25,7 +25,7 @@ def verify_token():
 
     try:
         # Decode the token using the JWT_SECRET_KEY set in your Flask app
-        print(os.getenv('JWT_SECRET_KEY'))
+        # print(os.getenv('JWT_SECRET_KEY'))
         decoded_payload = jwt.decode(token, os.getenv('JWT_SECRET_KEY'), algorithms=['HS256'])
 
         _id = decoded_payload['_id']

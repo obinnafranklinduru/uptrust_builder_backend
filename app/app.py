@@ -30,18 +30,18 @@ def cv_analyser():
     if file:
         _id = decoded_payload_or_error[0]
         email = decoded_payload_or_error[1]
-        
+
         file_content = file.read()  # Read the file content
-        print(os.getcwd)
+        # print(os.getcwd)
         path = os.getcwd() + 'cv_file.pdf'
-        print(path)
+        # print(path)
 
         with open(path, 'wb') as f:
             f.write(file_content)
 
         with open(path, 'rb') as f:
             saved_file_content = f.read()
-            print(saved_file_content)
+            # print(saved_file_content)
 
         score = CvAnalyser()
 
