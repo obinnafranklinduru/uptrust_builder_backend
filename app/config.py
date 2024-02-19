@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request
 import os
-from flask_pymongo import PyMongo
+# from flask_pymongo import PyMongo
+from flask_sqlalchemy import SQLAlchemy
+
 
 # from flask_jwt import JWT
 import jwt
@@ -13,9 +15,11 @@ secret_key = os.getenv("SECRET_KEY")
 app.config["SECRET_KEY"] = secret_key
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 app.config["UOLOAD_FOLDER"] = os.getcwd()
-app.config['MONGO_URI'] = 'mongodb+srv://uptrustdatabase:MA5SxJuiWIBf1Mef@dictionary.dxa2nfr.mongodb.net/uptrustdatabase?retryWrites=true&w=majority'
+# app.config['MONGO_URI'] = 'mongodb+srv://uptrustdatabase:MA5SxJuiWIBf1Mef@dictionary.dxa2nfr.mongodb.net/uptrustdatabase?retryWrites=true&w=majority'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://avnadmin:AVNS_LXBhlJ-mBWPrUM6DrKm@mysql-249b0d7d-heim-weildios.a.aivencloud.com:26029/defaultdb'
 
-mongo = PyMongo(app)
+# mongo = PyMongo(app)
+db = SQLAlchemy(app)
 
 def verify_token():
     token = request.headers.get('Authorization')
@@ -45,28 +49,37 @@ def verify_token():
 from datetime import datetime
 # from bson.objectid import ObjectId
 
-class Email:
-    def __init__(self, email_gen, user_id, user_name, email_address, job_description):
-        self.email = email_gen
-        self.user_id = user_id
-        self.applicant_name = user_name
-        self.applicant_email = email_address
-        self.job_description = job_description
-        self.date_time = datetime.now()
+class Email(db.Model):
+    __tablename__ = 'emails'
 
-class CV_File:
-    def __init__(self, user_id, file_name, file_data, score, email_address):
-        self.user_id = user_id
-        self.file_name = file_name
-        self.file_data = file_data
-        self.score = score
-        self.email_address = email_address
-        self.date_time = datetime.now()
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(256))
+    user_id = db.Column(db.String(100))
+    applicant_name = db.Column(db.String(100))
+    applicant_email = db.Column(db.String(100))
+    job_description = db.Column(db.String(100))
+    date_time = db.Column(db.DateTime, default=datetime.now)
 
-class Jobs:
-    def __init__(self, file_name, file_data):
-        self.file_name = file_name
-        self.file_data = file_data
-        self.date_time = datetime.now()
+class CVFile(db.Model):
+    __tablename__ = 'cv_files'
 
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Text)  # User Id is String because it's receiving the user Id from a mongodb database
+    file_name = db.Column(db.String(100))
+    file_data = db.Column(db.String(255))  # Change this to the appropriate data type for your file data
+    score = db.Column(db.Integer)
+    t_score = db.Column(db.Integer)
+    email_address = db.Column(db.String(100))
+    date_time = db.Column(db.DateTime, default=datetime.now)
 
+class Job(db.Model):
+    __tablename__ = 'jobs'
+
+    id = db.Column(db.Integer, primary_key=True)
+    file_name = db.Column(db.String(100))
+    file_data = db.Column(db.String(256*5))  # Change this to the appropriate data type for your file data
+    date_time = db.Column(db.DateTime, default=datetime.now)
+
+with app.app_context():
+    db.drop_all()
+    db.create_all()

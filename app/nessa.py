@@ -63,9 +63,9 @@ def CvAnalyser(cv_file_name=os.getcwd() + 'cv_file.pdf',
                 extract_education = False
                 continue  # Skip this line
 
-            print(extract_skills)
-            print(extract_education)
-            print(extract_experience)
+            # print(extract_skills)
+            # print(extract_education)
+            # print(extract_experience)
             # Extract information based on the active section flag
             if extract_experience:
                 experience += line + '\n'
@@ -75,7 +75,7 @@ def CvAnalyser(cv_file_name=os.getcwd() + 'cv_file.pdf',
                 education += line + '\n'
 
         # # the extracted information for each file
-        print(f"Experience:{experience}\nSkills:{skills}\nEducation:{education}\n")
+        # print(f"Experience:{experience}\nSkills:{skills}\nEducation:{education}\n")
 
     experience = ' '.join(experience.split('\n'))
     # #(experience)

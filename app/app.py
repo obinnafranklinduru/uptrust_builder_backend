@@ -3,8 +3,8 @@ from flask import request, jsonify
 from emails import EmailGenerator
 from nessa import CvAnalyser
 import logging, json
-from config import app, mongo, Email, CV_File, verify_token
-
+from config import app, db, Email, CVFile, verify_token
+import PyPDF2
 
 """ ROUTES """
 
@@ -30,6 +30,7 @@ def cv_analyser():
     if file:
         _id = decoded_payload_or_error[0]
         email = decoded_payload_or_error[1]
+        print(len(str(_id)))
 
         file_content = file.read()  # Read the file content
         # print(os.getcwd)
@@ -38,21 +39,23 @@ def cv_analyser():
 
         with open(path, 'wb') as f:
             f.write(file_content)
-
+        
         with open(path, 'rb') as f:
-            saved_file_content = f.read()
+            reader = PyPDF2.PdfReader(f)
 
-        score = int(CvAnalyser()[0])
-        t_score = int(CvAnalyser()[1])
+        scores = CvAnalyser()
+        score, t_score = int(scores[0]), int(scores[1])
         print(type(score))
         print(type(t_score))
 
         # Save file to the database
-        cv_user = CV_File(file_name=file.filename, file_data=saved_file_content, email_address=email, score={'score': score, 't_score': t_score}, user_id=_id)
-        mongo.db.cv_files.insert_one(cv_user.__dict__)
+        cv_user = CVFile(file_name=file.filename, file_data=reader, email_address=email, score=score, t_score=t_score, user_id=str(_id))
+        with app.app_context():
+            db.session.add(cv_user)
+            db.session.commit()
 
         return jsonify({'message': 'File uploaded and saved to database successfully',
-                        'result': f'{score}'})
+                        'result': f'{score}/{t_score}'})
 
 @app.route('/email-writer', methods=['POST', 'GET'], endpoint='email_writer')
 def email_writer():
@@ -80,12 +83,14 @@ def email_writer():
             email = _email.generate_email(job_description=job_desc, applicant_name=appl_name, applicant_email=appl_email)
             with app.app_context():
                 email_user = Email(email=email,
-                                 user_id=user_id,
+                                 user_id=str(user_id),
                                  applicant_name=appl_name,
                                  applicant_email=appl_email,
                                  job_description=str(json.dumps(job_desc)))
                 #(_email)
-                mongo.db.emails.insert_one(email_user.__dict__)
+                with app.app_context():
+                    db.session.add(email_user)
+                    db.session.commit()
 
             return jsonify({'message': _email.generate_email(job_description=job_desc, applicant_name=appl_name, applicant_email=appl_email),
                         'status_code': 200})
