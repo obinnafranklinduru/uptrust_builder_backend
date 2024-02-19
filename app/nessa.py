@@ -17,8 +17,8 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import r2_score
 
 
-def CvAnalyser(cv_file_name=os.path.abspath(r"C:\Users\USER\uptrust_builder_backend\appcv_file.pdf"),
-               job_file=os.path.abspath(r"C:\Users\USER\uptrust_builder_backend\app\datascience.csv")):
+def CvAnalyser(cv_file_name=os.getcwd() + 'cv_file.pdf',
+               job_file=os.getcwd() + 'datascience.csv'):
     with open(cv_file_name, 'rb') as f:
         reader = PyPDF2.PdfReader(f)
         text = ''

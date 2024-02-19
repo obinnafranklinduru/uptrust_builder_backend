@@ -18,7 +18,10 @@ app.config['MONGO_URI'] = 'mongodb+srv://uptrustdatabase:MA5SxJuiWIBf1Mef@dictio
 mongo = PyMongo(app)
 
 def verify_token():
-    token = request.headers.get('Authorization').split(" ")[1]
+    token = request.headers.get('Authorization')
+    if token:
+        print(token)
+        token = request.headers.get('Authorization')
 
     if not token:
         return False, "Token not provided"
