@@ -21,7 +21,7 @@ def verify_token():
     token = request.headers.get('Authorization')
     if token:
         print(token)
-        token = request.headers.get('Authorization')
+        token = token.split(" ")[1]
 
     if not token:
         return False, "Token not provided"
