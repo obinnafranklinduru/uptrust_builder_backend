@@ -2,10 +2,8 @@ import os
 from flask import request, jsonify
 from emails import EmailGenerator
 from nessa import CvAnalyser
-import logging, json, requests
-from config import app, db, Email, CVFile, verify_token
-from flask_jwt_extended import jwt_required, get_jwt_identity, verify_jwt_in_request
-# from collections.abc import Mapping
+import logging, json
+from config import app, mongo, Email, CVFile, verify_token
 
 
 """ ROUTES """
@@ -45,12 +43,11 @@ def cv_analyser():
             saved_file_content = f.read()
             print(saved_file_content)
 
-        score = CvAnalyser()[0]
+        score = CvAnalyser()
 
         # Save file to the database
-        cv_file = CVFile(file_name=file.filename, file_data=file_content, email_address=email, score=score, user_id=_id)
-        db.session.add(cv_file)
-        db.session.commit()
+        cv_user = CVFile(file_name=file.filename, file_data=file_content, email_address=email, score=score, user_id=_id)
+        mongo.db.emails.insert_one(cv_user.__dict__)
 
         return jsonify({'message': 'File uploaded and saved to database successfully',
                         'result': f'{score}'})
@@ -80,14 +77,14 @@ def email_writer():
             _email = EmailGenerator()
             email = _email.generate_email(job_description=job_desc, applicant_name=appl_name, applicant_email=appl_email)
             with app.app_context():
-                new_user = Email(email=email,
+                email_user = Email(email=email,
                                  user_id=user_id,
                                  applicant_name=appl_name,
                                  applicant_email=appl_email,
                                  job_description=str(json.dumps(job_desc)))
                 #(_email)
-                db.session.add(new_user)
-                db.session.commit()
+                mongo.db.emails.insert_one(email_user.__dict__)
+
             return jsonify({'message': _email.generate_email(job_description=job_desc, applicant_name=appl_name, applicant_email=appl_email),
                         'status_code': 200})
         except ValueError as err:
